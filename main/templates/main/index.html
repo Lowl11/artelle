@@ -1,0 +1,58 @@
+{% extends "main/template.html" %}
+{% load staticfiles %}
+
+{% block video %}
+    <!-- The video -->
+    <video autoplay loop id="promo">
+        <source src="/media/home/promo.mp4" type="video/mp4" onerror="videoError()">
+        Ваш браузер не поддерживает данный формат видео
+    </video>
+{% endblock %}
+
+
+{% block content %}
+    <!-- CENTER -->
+    <div class="flex-box dir-col text-center">
+        <h1>{{ info.title }}</h1>
+        <ul>
+            <li>{{ info.subtitle1 }}</li>
+            <li>{{ info.subtitle2 }}</li>
+            <li>{{ info.subtitle3 }}</li>
+        </ul>
+        <div class="justify-center">
+            <button type="button" class="classic-btn big-size-btn" data-toggle="modal" data-target="#exampleModal">Оставить заявку</button>
+        </div>
+    </div>
+    <!-- /CENTER -->
+
+    <!-- FOOTER -->
+    <div class="flex-box flex-end video-controllers">
+        <img src="{% static 'img/pause.png' %}" alt="Пауза" data-status="1" id="pause-video">
+        <img src="{% static 'img/sound_on.png' %}" alt="Выключить заявку" data-status="1" id="soff-video">
+    </div>
+    <!-- /FOOTER -->
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: #000;">ПОДАТЬ ЗАЯВКУ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="studio-form">
+                    <input type="text" placeholder="Имя" name="" class="form-control">
+                    <input type="text" placeholder="Тел" name="" class="form-control">
+                    <input type="text" placeholder="Email" name="" class="form-control">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                <button type="button" class="btn btn-primary">Отправить</button>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

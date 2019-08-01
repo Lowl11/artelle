@@ -1,0 +1,94 @@
+{% extends "cms/template.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    <!-- DropZone CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/dropzone/dropzone.css' %}">
+{% endblock %}
+
+{% block js %}
+    <!-- DropZone JS -->
+    <script src="{% static 'cms/js/dropzone/dropzone.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-element-list">
+            {% if msg %}
+            <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
+            {% endif %}
+            <form method="POST" action="{% url 'cms_edit_main' %}">{% csrf_token %}
+                <div class="basic-tb-hd">
+                    <h2>Редактировать данные страницы "О Нас"</h2>
+                    <p>На этой странице можно изменить видео и заголовок и подзаголовки главной страницы.</p>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="title" value="{{ info.title }}" placeholder="Заголовок">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="subtitle1" value="{{ info.subtitle1 }}" placeholder="Подзаголовк №1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="subtitle2" value="{{ info.subtitle2 }}" placeholder="Подзаголовк №2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="subtitle3" value="{{ info.subtitle3 }}" placeholder="Подзаголовк №3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="justify-center">
+                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dropzone area Start-->
+    <!-- <div class="dropzone-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="dropdone-nk mg-t-30">
+                        <div class="cmp-tb-hd">
+                            <h2>Сменить видео заднего плана</h2>
+                            <p>Просто перетащите видео в нижнюю область и нажмите сохранить.</p>
+                        </div>
+                        <div id="dropzone1" class="multi-uploader-cs">
+                            <form action="#" class="dropzone dropzone-nk needsclick" id="demo1-upload">{% csrf_token %}
+                                <div class="dz-message needsclick download-custom">
+                                    <i class="notika-icon notika-cloud"></i>
+                                    <h2>Drop files here or click to upload.</h2>
+                                    <p><span class="note needsclick">Перетащите файл в данную зону или кликните для загрузки</span>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                        <br>
+                        <div class="justify-center">
+                            <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- Dropzone area End-->
+{% endblock %}

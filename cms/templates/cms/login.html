@@ -1,0 +1,167 @@
+{% load staticfiles %}
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{{ title }} - CMS ArtElle</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'cms/img/favicon.ico' %}">
+
+    <!-- Font Roboto -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'cms/css/bootstrap.min.css' %}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'cms/css/font-awesome.min.css' %}">
+    
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="{% static 'cms/css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'cms/css/owl.theme.css' %}">
+    <link rel="stylesheet" href="{% static 'cms/css/owl.transitions.css' %}">
+
+    <!-- MeanMenu -->
+    <link rel="stylesheet" href="{% static 'cms/css/meanmenu/meanmenu.min.css' %}">
+    
+    <!-- Animate -->
+    <link rel="stylesheet" href="{% static 'cms/css/animate.css' %}">
+
+    <!-- Normalize -->
+    <link rel="stylesheet" href="{% static 'cms/css/normalize.css' %}">
+
+    <!-- mCustomScrollbar -->
+    <link rel="stylesheet" href="{% static 'cms/css/scrollbar/jquery.mCustomScrollbar.min.css' %}">
+
+    <!-- JVectorMap -->
+    <link rel="stylesheet" href="{% static 'cms/css/jvectormap/jquery-jvectormap-2.0.3.css' %}">
+    
+    <!-- Norkia Icon -->
+    <link rel="stylesheet" href="{% static 'cms/css/notika-custom-icon.css' %}">
+    
+    <!-- Waves -->
+    <link rel="stylesheet" href="{% static 'cms/css/wave/waves.min.css' %}">
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/main.css' %}">
+    
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="{% static 'cms/style.css' %}">
+    
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/responsive.css' %}">
+    
+    <!-- Modernizr -->
+    <script src="{% static 'cms/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <!-- Login Register area Start-->
+    <div class="login-content">
+        <!-- Login -->
+        <div class="nk-block toggled" id="l-login">
+            <form action="{% url 'login_vp' %}" method="POST">{% csrf_token %}
+                <div class="nk-form">
+                    {% if error %}
+                    <div class="alert alert-danger alert-mg-b-0" role="alert">{{ error }}</div>
+                    {% endif %}
+                    <div class="input-group">
+                        <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-support"></i></span>
+                        <div class="nk-int-st">
+                            <input type="text" name="username" class="form-control" placeholder="Имя пользователя" required>
+                        </div>
+                    </div>
+                    <div class="input-group mg-t-15">
+                        <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-edit"></i></span>
+                        <div class="nk-int-st">
+                            <input type="password" name="password" class="form-control" placeholder="Пароль" required>
+                        </div>
+                    </div>
+                    <div class="fm-checkbox">
+                        <label><input type="checkbox" class="i-checks"> <i></i> Оставаться в сети</label>
+                    </div>
+                    <!-- <a href="#l-register" data-ma-action="nk-login-switch" data-ma-block="#l-register" class="btn btn-login btn-success btn-float"><i class="notika-icon notika-right-arrow right-arrow-ant"></i></a> -->
+                    <button type="submit" class="btn btn-login btn-success btn-float"><i class="notika-icon notika-right-arrow right-arrow-ant"></i></button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <!-- Login Register area End-->
+    
+    <!-- jQuery -->
+    <script src="{% static 'cms/js/vendor/jquery-1.12.4.min.js' %}"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="{% static 'cms/js/bootstrap.min.js' %}"></script>
+    
+    <!-- Wow JS -->
+    <script src="{% static 'cms/js/wow.min.js' %}"></script>
+    
+    <!-- Price Slider JS -->
+    <script src="{% static 'cms/js/jquery-price-slider.js' %}"></script>
+    
+    <!-- Owl Carousel JS -->
+    <script src="{% static 'cms/js/owl.carousel.min.js' %}"></script>
+    
+    <!-- scrollUp JS -->
+    <script src="{% static 'cms/js/jquery.scrollUp.min.js' %}"></script>
+    
+    <!-- MeanMenu JS -->
+    <script src="{% static 'cms/js/meanmenu/jquery.meanmenu.js' %}"></script>
+    
+    <!-- counterup JS -->
+    <script src="{% static 'cms/js/counterup/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'cms/js/counterup/waypoints.min.js' %}"></script>
+    <script src="{% static 'cms/js/counterup/counterup-active.js' %}"></script>
+    
+    <!-- mCustomScrollbar JS -->
+    <script src="{% static 'cms/js/scrollbar/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    
+    <!-- JVectorMap JS -->
+    <script src="{% static 'cms/js/jvectormap/jquery-jvectormap-2.0.2.min.js' %}"></script>
+    <script src="{% static 'cms/js/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'cms/js/jvectormap/jvectormap-active.js' %}"></script>
+
+    <!-- Sparkline JS -->
+    <script src="{% static 'cms/js/sparkline/jquery.sparkline.min.js' %}"></script>
+    <script src="{% static 'cms/js/sparkline/sparkline-active.js' %}"></script>
+
+    <!-- Flot JS -->
+    <script src="{% static 'cms/js/flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'cms/js/flot/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'cms/js/flot/curvedLines.js' %}"></script>
+    <script src="{% static 'cms/js/flot/flot-active.js' %}"></script>
+    
+    <!-- Knob JS -->
+    <script src="{% static 'cms/js/knob/jquery.knob.js' %}"></script>
+    <script src="{% static 'cms/js/knob/jquery.appear.js' %}"></script>
+    <script src="{% static 'cms/js/knob/knob-active.js' %}"></script>
+    
+    <!-- Waves JS -->
+    <script src="{% static 'cms/js/wave/waves.min.js' %}"></script>
+    <script src="{% static 'cms/js/wave/wave-active.js' %}"></script>
+    
+    <!-- TODO JS -->
+    <script src="{% static 'cms/js/todo/jquery.todo.js' %}"></script>
+    
+    <!-- Plugins JS -->
+    <script src="{% static 'cms/js/plugins.js' %}"></script>
+    
+    <!-- Chat JS -->
+    <script src="{% static 'cms/js/chat/moment.min.js' %}"></script>
+    <script src="{% static 'cms/js/chat/jquery.chat.js' %}"></script>
+    
+    <!-- Main JS -->
+    <script src="{% static 'cms/js/main.js' %}"></script>
+    
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+{% extends "main/template.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <!-- CENTER -->
+    <div class="flex-box-center">
+        <div class="flex-box studio">
+            <div class="left">
+                <div class="block">
+                    <div class="title">Студия звукозаписи - ARTelle</div>
+                    <div class="subtitle">Приходите в нашу уютную студию 🎤🎧</div>
+                    <ul>
+                        <li>🎼Креатив и производство аудио–джинглов</li>
+                        <li>🎼Озвучивание текстов</li>
+                        <li>🎼Создание корпоративной музыки и гимнов </li>
+                        <li>🎼Обработка любых материалов клиента</li>
+                        <li>🎼Изготовление аранжировок, фонограмм, минусовок</li>
+                        <li>🎼Песня «Под ключ»/Cover</li>
+                        <li>🎼Песня «Под ключ»/Авторская</li>
+                    </ul>
+                </div>
+                <div class="justify-center">
+                    <button type="button" class="classic-btn" data-toggle="modal" data-target="#exampleModal">Оставить заявку</button>
+                </div>
+            </div>
+            <div class="right">
+                <img src="{% static 'img/studio.jpg' %}" alt="Студия">
+            </div>
+        </div>
+    </div>
+    <!-- /CENTER -->
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">ПОДАТЬ ЗАЯВКУ</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form class="studio-form">
+                <input type="text" placeholder="Имя" name="" class="form-control">
+                <input type="text" placeholder="Тел" name="" class="form-control">
+                <input type="text" placeholder="Email" name="" class="form-control">
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+            <button type="button" class="btn btn-primary">Отправить</button>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

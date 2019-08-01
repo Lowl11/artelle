@@ -1,0 +1,19 @@
+{% extends "main/template.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <!-- CENTER -->
+    <div class="flex-box dir-col text-center">
+        <h1>Категории проектов</h1>
+        <div class="projects">
+            {% for c in categories %}
+                <div class="project">
+                    <img src="{{ c.image.url }}" alt="{{ c.name }}">
+                    <p class="background"></p>
+                    <p class="text"><a href="{% url 'projects_list_view' %}?id={{ c.id }}">{{ c.name }}</a></p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- /CENTER -->
+{% endblock %}

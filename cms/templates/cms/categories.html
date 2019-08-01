@@ -1,0 +1,122 @@
+{% extends "cms/template.html" %}
+{% load staticfiles %}
+
+{% block js %}
+    <script>
+        $('#main-li').removeClass('active')
+        $('#main').removeClass('active')
+
+        $('#categories-li').addClass('active')
+        $('#categories').addClass('active')
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-element-list">
+            {% if msg1 %}
+            <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
+            {% endif %}
+            <form method="POST" enctype="multipart/form-data" action="{% url 'cms_categories' %}">{% csrf_token %}
+                <div class="basic-tb-hd">
+                    <h2>Категория №1</h2>
+                </div>
+                <input type="hidden" name="id" value="{{ category1.id }}">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="title" value="{{ category1.name }}" placeholder="Заголовок">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <h5>Изображение категории: (загрузите изображние для изменения)</h5>
+                                <input type="file" class="form-control" name="image" placeholder="Изображение">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="justify-center">
+                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 30px;">
+        <div class="form-element-list">
+            {% if msg2 %}
+            <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
+            {% endif %}
+            <form method="POST" enctype="multipart/form-data" action="{% url 'cms_categories' %}">{% csrf_token %}
+                <div class="basic-tb-hd">
+                    <h2>Категория №2</h2>
+                </div>
+                <input type="hidden" name="id" value="{{ category2.id }}">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="title" value="{{ category2.name }}" placeholder="Заголовок">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <h5>Изображение категории: (загрузите изображние для изменения)</h5>
+                                <input type="file" class="form-control" name="image" placeholder="Изображение">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="justify-center">
+                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 30px;">
+        <div class="form-element-list">
+            {% if msg3 %}
+            <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
+            {% endif %}
+            <form method="POST" enctype="multipart/form-data" action="{% url 'cms_categories' %}">{% csrf_token %}
+                <div class="basic-tb-hd">
+                    <h2>Категория №3</h2>
+                </div>
+                <input type="hidden" name="id" value="{{ category3.id }}">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="title" value="{{ category3.name }}" placeholder="Заголовок">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <h5>Изображение категории: (загрузите изображние для изменения)</h5>
+                                <input type="file" class="form-control" name="image" placeholder="Изображение">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="justify-center">
+                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

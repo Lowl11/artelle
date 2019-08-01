@@ -1,0 +1,195 @@
+{% extends "cms/template.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    <!-- SummerNote CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/summernote/summernote.css' %}">
+
+    <style>
+        .project-images {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .project-image {
+            margin-left: 30px;
+            position: relative;
+        }
+
+        .project-image img {
+            width: 150px;
+            transition: .25s;
+        }
+
+        .project-image img:hover {
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .project-image p {
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: #fff;
+            background: rgba(0, 0, 0, .4);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+            transition: .25s;
+        }
+
+        .project-image p { transition: .25s; }
+
+        .project-image span:hover,
+        .project-image p { cursor: pointer; }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $('#main-li').removeClass('active')
+        $('#main').removeClass('active')
+
+        $('#projects-li').addClass('active')
+        $('#projects').addClass('active')
+    </script>
+
+    <!-- SummerNote JS -->
+    <script src="{% static 'cms/js/summernote/summernote-updated.min.js' %}"></script>
+    <script src="{% static 'cms/js/summernote/summernote-active.js' %}"></script>
+
+    <!-- DropZone JS -->
+    <script src="{% static 'cms/js/dropzone/dropzone.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('#summernote').summernote({
+                placeholder: 'Описание проекта',
+                tabsize: 2,
+                height: 200
+            })
+
+            $('#edit-project').click(function() {
+                var html = $('.note-editable').html()
+                $('#description-field').val(html)
+                $('#edit-project-form').submit()
+            })
+
+            $('.project-image').hover(function() {
+                var id = $(this).data('id')
+                $('#image-text' + id).css({'display': 'flex'})
+            }, function() {
+                $('.project-image p').css({'display': 'none'})
+            })
+
+            $('.project-image p').click(function() {
+                var id = $(this).data('id')
+                if (confirm('Вы уверены что хотите удалить данное изображение?')) {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'delete/',
+                        data: {
+                            'id': id
+                        },
+                        cache: false,
+                        success: function(data) {
+                            if(data == "1")
+                                $('#project-image' + id).remove()
+                            else
+                                alert('Неизвестная ошибка с сервера')
+                        },
+                        error: function() { alert('Неизвестная ошибка с сервера') }
+                    })
+                }
+            })
+
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-element-list">
+            {% if msg %}
+            <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
+            {% endif %}
+            <form method="POST" action="{% url 'cms_project' %}" id="edit-project-form">{% csrf_token %}
+                <div class="basic-tb-hd">
+                    <h2>Редактирование проекта</h2>
+                    <p>На этой странице можно изменить название проекта, описание, дату и медиафайлы .</p>
+                </div>
+                <input type="hidden" name="id" value="{{ project.id }}">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="name" value="{{ project.name }}" placeholder="Название">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <div class="nk-int-st">
+                                    <textarea id="summernote">{{ project.description|safe }}</textarea>
+                                    <textarea id="description-field" name="description" style="display: none;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="justify-center">
+                    <button type="button" class="btn btn-primary notika-btn-primary btn-lg" id="edit-project">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dropzone area Start-->
+    <div class="dropzone-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="dropdone-nk mg-t-30">
+                        <div class="cmp-tb-hd">
+                            <h2>Управление изображениями проекта</h2>
+                            <p>Можно добавлять фото или видео.</p>
+                        </div>
+                        <hr>
+                        <form method="POST" enctype="multipart/form-data" action="{% url 'cms_project_upload' %}">{% csrf_token %}
+                            <div class="justify-center">
+                                <input type="hidden" name="id" value="{{ project.id }}">
+                                <input type="file" name="file">
+                                <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Добавить</button>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class="cmp-tb-hd project-images">
+                            {% for i in images %}
+                            <div class="project-image" id="project-image{{ i.id }}" data-id="{{ i.id }}">
+                                <img src="{{ i.image.url }}" alt="{{ project.name }}">
+                                <p id="image-text{{ i.id }}" data-id="{{ i.id }}">
+                                    <span>Удалить?</span>
+                                </p>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- <div class="cmp-tb-hd project-videos">
+                            {% for v in videos %}
+                            <div class="project-video">
+                                <p>{{ v.path }}</p>
+                            </div>
+                            {% endfor %}
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dropzone area End-->
+{% endblock %}

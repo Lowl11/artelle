@@ -1,0 +1,433 @@
+/****************************** MAIN ******************************/
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.backup-bg {
+    background: url(/static/img/backup-bg.png) no-repeat;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#promo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+}
+
+#start-page {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.6);
+    color: #f1f1f1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.simple-page {
+    position: fixed;
+    color: #5F5F5F;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.responsive-height {
+    height: auto !important;
+    position: static !important;
+}
+
+#contact-page {
+    background: url(../img/bg-contact.png);
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#studio-page {
+    background: url(../img/bg-studio.png) no-repeat;
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#projects-page {
+    background: url(../img/bg-projects.png) no-repeat;
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+}
+
+.flex-container .flex-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.flex-box.dir-col.text-center {
+    flex-basis: 80%;
+    justify-content: center;
+}
+
+.classic-btn {
+    background-image: linear-gradient(#FFA600, #FF7F00);
+    border: none;
+    color: #fff;
+    width: 300px;
+    height: 50px;
+    font-size: 20px;
+    border-radius: 30px;
+}
+
+.classic-btn:hover { cursor: pointer; }
+
+h1 { margin: 0; }
+.simple-page h1 { color: #000; }
+ul li { list-style: none; }
+
+.dir-col { flex-direction: column; }
+.justify-center { justify-content: center; }
+.align-center { align-items: center; }
+.flex-box.flex-end { justify-content: flex-end; }
+.text-center { text-align: center; }
+
+button, input { outline: none; }
+button { cursor: pointer; }
+
+/****************************** /MAIN ******************************/
+
+
+
+
+
+/****************************** HEADER ******************************/
+.logo { text-transform: uppercase; }
+.logo a,
+.logo a:hover,
+.logo a:active,
+.logo a:visited { text-decoration: none; color: #fff; }
+.logo img { width: 140px; }
+
+.simple-page .logo a { color: #5F5F5F; }
+
+.flex-box .nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-box .nav ul { margin: 0; }  
+.flex-box .nav ul li { list-style: none; display: inline; }
+
+.flex-box .nav ul li a {
+    color: #FF8700;
+    text-decoration: none;
+    font-size: 20px;
+    margin-left: 30px;
+}
+
+.flex-box .nav ul li a:hover { border-bottom: 2px solid #FF8700; }
+.flex-box .nav ul li a.active { color: #9F9F9F; }
+.flex-box .nav ul li a.active:hover { cursor: default; border: none; }
+/****************************** /HEADER ******************************/
+
+
+
+
+
+/****************************** CENTER ******************************/
+.flex-box.dir-col.text-center h1 {
+    font-size: 40px;
+}
+
+#start-page.flex-container { justify-content: space-between; }
+#start-page h1 { text-transform: uppercase; }
+
+#start-page .video-controllers img {
+    width: 50px;
+    cursor: pointer;
+}
+
+#start-page .modal-content { z-index: 2222; }
+
+/**************** CONTACT ****************/
+.contact {
+    justify-content: center !important;
+    width: 90%;
+    padding-right: 0 !important;
+    margin-bottom: 30px;
+}
+
+.flex-box-center {
+    flex-basis: 80%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.contact .left {
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-right: 5px;
+}
+
+.contact ul li {
+    margin-top: 20px;
+    position: relative
+}
+
+.contact ul li.contact-address::before {
+    content: url(../img/icons/map.png);
+    width: 16px;
+    height: 22px;
+    position: absolute;
+    left: -23px;
+    top: 5px;
+}
+
+.contact ul li.contact-phone::before {
+    content: url(../img/icons/phone.png);
+    width: 16px;
+    height: 22px;
+    position: absolute;
+    left: -23px;
+    top: 5px;
+}
+
+.contact ul li.contact-email::before {
+    content: url(../img/icons/email.png);
+    width: 16px;
+    height: 22px;
+    position: absolute;
+    left: -23px;
+}
+
+.contact .right {
+    flex-basis: 50%;
+}
+/**************** /CONTACT ****************/
+
+
+
+
+/**************** REAL PROJECTS ****************/
+.rps {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.rp {
+    margin-top: 30px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rp p.text {
+    color: #fff;
+    position: absolute;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.rp p.text a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.rp p.background {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.6);
+    color: #f1f1f1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.carousel {
+    display: none;
+}
+
+.carousel .carousel-item {
+    background: #000;
+}
+
+.carousel .carousel-item .justify-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/**************** /REAL PROJECTS ****************/
+
+
+
+
+
+/**************** STUDIO ****************/
+.studio {
+    justify-content: center !important;
+    width: 90%;
+    padding-right: 0 !important;
+    margin-bottom: 40px;
+}
+
+.flex-box-center {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.studio .left {
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-right: 5px;
+}
+
+.studio .left ul { padding: 0; }
+.studio .right { flex-basis: 50%; }
+
+.studio-form input {
+    margin-bottom: 20px;
+}
+/**************** /STUDIO ****************/
+
+
+
+
+
+/**************** PROJECTS ****************/
+.projects {
+    /* margin-top: 30px; */
+    display: flex;
+    justify-content: space-around;
+    /* flex-wrap: wrap; */
+}
+
+.project {
+    /* width: 300px;
+    height: 400px; */
+    /* margin-top: 30px; */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.project p.text {
+    color: #fff;
+    position: absolute;
+    font-size: 18px;
+}
+
+.project p.text a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.project p.background {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.6);
+    color: #f1f1f1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+/**************** /PROJECTS ****************/
+
+.about {
+    background: url(/static/img/bg-about.jpeg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.about-text {
+    margin: 30px 0;
+    z-index: 2;
+    padding: 30px;
+}
+
+.about-text p {
+    text-indent: 20px;
+    margin: 0;
+    color: #fff;
+    z-index: 2;
+}
+
+.container-fluid.about {
+    padding: 0;
+}
+
+.about .bg {
+    position: absolute;
+    top: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 1;
+}
+
+.about h3,
+.partners h3 {
+    font-size: 30px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #fff;
+    line-height: 0.1em;
+    margin: 30px 0;
+    z-index: 2;
+    color: #FF8700;
+}
+
+.about h3 span,
+.partners h3 span {
+    background: #fff;
+    padding: 0 10px;
+}
+
+.partners h3 { border-color: #000; }
+/****************************** /CENTER ******************************/
+
+
+
+
+
+/****************************** BOTTOM (START PAGE) ******************************/
+.dot {
+    background: #FFA100;
+    border-radius: 50%;
+    padding: 10px;
+    margin-left: 10px;
+}
+/****************************** /BOTTOM (START PAGE) ******************************/

@@ -1,0 +1,62 @@
+{% extends "cms/template.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="form-element-list">
+            {% if msg %}
+            <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
+            {% endif %}
+            <form method="POST" action="{% url 'cms_edit_contact_post' %}">{% csrf_token %}
+                <div class="basic-tb-hd">
+                    <h2>Редактировать данные страницы "Контакты"</h2>
+                    <p>На этой странице можно изменить адрес, номера и почту компании. </p>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="address" value="{{ info.address }}" placeholder="Адрес">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="phone1" value="{{ info.phone1 }}" placeholder="Тел. ном. №1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="phone2" value="{{ info.phone2 }}" placeholder="Тел. ном. №2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="phone3" value="{{ info.phone3 }}" placeholder="Тел. ном. №3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="mail" value="{{ info.mail }}" placeholder="Почта">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="justify-center">
+                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
