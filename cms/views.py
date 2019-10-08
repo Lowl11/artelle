@@ -8,17 +8,17 @@ from django.contrib.auth.decorators import login_required
 import os
 
 from .models import MainInfo
-from main.models import Category, Project, ProjectMedia
+from main.models import Category, Project, ProjectMedia, StudioAudio, StudioImage
 
 ################################ MAIN ################################
-@login_required
+@login_required(login_url='/cms/login/')
 def cms_home_view(request):
     context = {
         'title': 'Главная'
     }
     return render(request, 'cms/index.html', context)
 
-@login_required
+@login_required(login_url='/cms/login/')
 def cms_edit_home(request):
     info = MainInfo.objects.get(pk=1)
     context = {
@@ -27,7 +27,7 @@ def cms_edit_home(request):
     }
     return render(request, 'cms/edit-home.html', context)
 
-@login_required
+@login_required(login_url='/cms/login/')
 def cms_edit_contact(request):
     info = MainInfo.objects.get(pk=1)
     context = {
@@ -36,9 +36,29 @@ def cms_edit_contact(request):
     }
     return render(request, 'cms/edit-contact.html', context)
 
-@login_required
+@login_required(login_url='/cms/login/')
 def cms_edit_about(request):
     info = MainInfo.objects.get(pk=1)
+    if request.method == "POST":
+        try:
+            about = request.POST['about']
+            info.about = about
+            info.save()
+        except:
+            context = {
+                'title': 'Редактировать страницу "О Нас"',
+                'info': info,
+                'error': 'Произошел сбой при сохранении информации'
+            }
+            return render(request, 'cms/edit-about.html', context)
+        context = {
+            'title': 'Редактировать страницу "О Нас"',
+            'info': info,
+            'msg': 'Информация успешно обновлена'
+        }
+        return render(request, 'cms/edit-about.html', context)
+
+
     context = {
         'title': 'Редактировать страницу "О Нас"',
         'info': info
@@ -52,6 +72,7 @@ def cms_edit_about(request):
 
 
 ################################ EDIT PAGES ################################
+@login_required(login_url='/cms/login/')
 def cms_edit_main(request):
     if request.method == "POST":
         title = request.POST['title']
@@ -74,6 +95,7 @@ def cms_edit_main(request):
         return render(request, 'cms/edit-home.html', context)
     return redirect('/cms/edithome/')
 
+@login_required(login_url='/cms/login/')
 def cms_edit_main_upload(request):
     if request.method == "POST":
         video = request.FILES['file']
@@ -105,6 +127,7 @@ def cms_edit_main_upload(request):
         return render(request, 'cms/edit-home.html', context)
     return redirect('/cms/edithome/')
 
+@login_required(login_url='/cms/login/')
 def cms_edit_contact_post(request):
     if request.method == "POST":
         address = request.POST['address']
@@ -141,6 +164,10 @@ def cms_categories(request):
     if request.method == "POST":
         id = int(request.POST['id'])
         title = request.POST['title']
+        description = request.POST['description']
+
+        debug(description, 'Description of category with id ' + str(id))
+
         img = False
         try:
             image = request.FILES['image']
@@ -156,6 +183,7 @@ def cms_categories(request):
         
         if id == 1:
             category1.name = title
+            category1.description = description
             if img:
                 path = category1.image.path
                 os.remove(path)
@@ -163,6 +191,7 @@ def cms_categories(request):
             category1.save()
         elif id == 2:
             category2.name = title
+            category2.description = description
             if img:
                 path = category2.image.path
                 os.remove(path)
@@ -170,6 +199,7 @@ def cms_categories(request):
             category2.save()
         elif id == 3:
             category3.name = title
+            category3.description = description
             if img:
                 path = category3.image.path
                 os.remove(path)
@@ -200,29 +230,53 @@ def cms_categories(request):
             context['msg3'] = text
     return render(request, 'cms/categories.html', context)
 
+@login_required(login_url='/cms/login/')
 def cms_projects(request):
     projects = Project.objects.all()
+    for p in projects:
+        cat_id = p.category_id
+        p.category_name = Category.objects.get(pk=cat_id).name
     context = {
         'title': 'Проекты',
         'projects': reversed(projects)
     }
     return render(request, 'cms/projects.html', context)
 
+@login_required(login_url='/cms/login/')
 def cms_projects_new(request):
     if request.method == "POST":
         name = request.POST['name']
         description = request.POST['description']
+        date = request.POST['date']
+        cat = request.POST['category']
+
+        # YYYY-MM-DD
+        # 02-08-2019 0-1-2
+        darr = date.split('/')
+        date = darr[2] + '-' + darr[1] + '-' + darr[0]
+
+        category = Category.objects.get(name=cat)
+
+        if name == '' or description == '' or date == '' or category is None:
+            context = {
+                'title': 'Новый проект',
+                'error': 'Один или несколько полей не были заполнены'
+            }
+            return render(request, 'cms/new-project.html', context)
 
         project = Project()
+        project.category_id = category.id
         project.name = name
         project.description = description
-        project.date = datetime.now()
+        project.date = date
         project.save()
 
         return redirect('/cms/projects/')
 
+    categories = Category.objects.all()
     context = {
-        'title': 'Новый проект'
+        'title': 'Новый проект',
+        'categories': categories
     }
     return render(request, 'cms/new-project.html', context)
 
@@ -232,12 +286,19 @@ def cms_project(request):
         id = request.POST['id']
         name = request.POST['name']
         description = request.POST['description']
-        # здесь datetime должен быть
+        date = request.POST['date']
+        cat = request.POST['category']
+
+        darr = date.split('/')
+        date = darr[2] + '-' + darr[1] + '-' + darr[0]
+
+        category = Category.objects.get(name=cat)
 
         project = Project.objects.get(pk=id)
+        project.category_id = category.id
         project.name = name
         project.description = description
-        # здесь datetime должен быть
+        project.date = date
         project.save()
 
         return redirect('/cms/projects/project/?id=' + str(id))
@@ -245,16 +306,21 @@ def cms_project(request):
     try:
         id = request.GET['id']
         project = Project.objects.get(pk=id)
+        formatted = str(project.date).split('-')
+        project.formatted = formatted[2] + '/' + formatted[1] + '/' + formatted[0]
         images = ProjectMedia.objects.filter(project=project, type=1)
         videos = ProjectMedia.objects.filter(project=project, type=2)
     except:
         return redirect('/cms/projects/')
     
+    categories = Category.objects.all()
+
     context = {
         'title': 'Редактировать проект',
         'project': project,
         'images': images,
-        'videos': videos
+        'videos': videos,
+        'categories': categories
     }
     return render(request, 'cms/edit-project.html', context)
 
@@ -282,6 +348,23 @@ def cms_project_upload(request):
         media.save()
 
         return redirect('/cms/projects/project/?id=' + str(id))
+    
+    if request.method == "GET":
+        if request.GET['action'] == 'delete':
+            try:
+                delete_id = request.GET['id']
+                project = Project.objects.get(pk=delete_id)
+                media = ProjectMedia.objects.filter(project=project)
+                if media is not None:
+                    for m in media:
+                        path = media.image.path
+                        os.remove(path)
+                        m.delete()
+                project.delete()
+                return HttpResponse('1')
+            except:
+                debug('Issue with try/catch delete project', 'Exception')
+                return HttpResponse('0')
     return redirect('/cms/projects/')
 
 def cms_project_delete(request):
@@ -298,6 +381,106 @@ def cms_project_delete(request):
     return HttpResponse('0')
 
 ################################ /CATEGORIES ################################
+
+
+
+
+
+################################ STUDIO ################################
+def cms_studio_audio(request):
+    if request.method == "POST":
+        action = request.POST['action']
+        if action == 'edit':
+            id = request.POST['id']
+            name = request.POST['name']
+            audio = StudioAudio.objects.get(pk=id)
+
+            try:
+                file = request.FILES['audio']
+                path = audio.audio.path
+                os.remove(path)
+
+                ext = get_extension(file.name)
+                file.name = 'audio-' + str(audio.id) + '.' + ext
+                audio.audio = file
+            except:
+                pass
+
+            audio.name = name
+            audio.save()
+        elif action == 'add':
+            name = request.POST['name']
+            file = request.FILES['audio']
+
+            audio = StudioAudio()
+            audio.name = name
+            audio.save()
+
+            ext = get_extension(file.name)
+            file.name = 'audio-' + str(audio.id) + '.' + ext
+
+            audio.audio = file
+            audio.save()
+        return redirect('/cms/studio/audio/')
+
+    audios = StudioAudio.objects.all()
+    context = {
+        'title': 'Ауидо записи - Студия',
+        'audios': reversed(audios)
+    }
+    return render(request, 'cms/audios.html', context)
+
+def cms_studio_audio_get(request):
+    try:
+        id = request.GET['id']
+        action = request.GET['action']
+        if action == 'delete':
+            audio = StudioAudio.objects.get(pk=id)
+            audio.delete()
+            return HttpResponse('1')
+        return HttpResponse('-1')
+    except:
+        pass
+    return HttpResponse('0')
+
+def cms_studio_images(request):
+    if request.method == 'POST':
+        image = request.FILES['image']
+        info = MainInfo.objects.get(pk=1)
+
+        id = info.si_counter + 1
+        ext = get_extension(image.name)
+        image.name = 'image-' + str(id) + '.' + ext
+
+        info.si_counter = id
+        info.save()
+
+        si = StudioImage()
+        si.image = image
+        si.save()
+
+        return redirect('/cms/studio/images/')
+    images = StudioImage.objects.all()
+    context = {
+        'title': 'Изображения - Студия',
+        'images': images
+    }
+    return render(request, 'cms/images.html', context)
+
+def cms_si_delete(request):
+    if request.method == "GET":
+        try:
+            id = request.GET['id']
+            si = StudioImage.objects.get(pk=id)
+            path = si.image.path
+            os.remove(path)
+            si.delete()
+            return HttpResponse('1')
+        except:
+            pass
+    return HttpResponse('0')
+
+################################ /STUDIO ################################
 
 
 
@@ -342,15 +525,21 @@ def debug(msg, pre = '0'):
     print('--------------------------------------------–\n')
 
 def get_extension(file):
-    dot = False
+    dot_counter = 0
+    for i in range(0, len(file)):
+        if file[i] == '.':
+            dot_counter += 1
+    
+    tmp_dot_counter = 0
     result = ''
+    dot = False
     for i in range(0, len(file)):
         if dot:
             result += file[i]
-
-        if file[i] == '.':
-            dot = True
-    
+        if file[i] == '.' and dot == False:
+            tmp_dot_counter += 1
+            if tmp_dot_counter == dot_counter:
+                dot = True
     return result
 
 def type(file):

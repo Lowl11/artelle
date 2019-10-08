@@ -4,6 +4,7 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=300)
     image = models.ImageField(upload_to='category/', verbose_name='Изображение категории')
+    description = models.TextField(verbose_name='Описание категории', default='')
 
     def __str__(self):
         return self.name
@@ -41,4 +42,23 @@ class ProjectMedia(models.Model):
         verbose_name_plural = "Медиа файлы Проектов"
 
 
+class StudioAudio(models.Model):
+    name = models.CharField(max_length=300)
+    audio = models.FileField(upload_to='studio_sounds/', verbose_name='Аудио запись', null=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = "Аудиозаписи Студии"
+
+
+class StudioImage(models.Model):
+    image = models.ImageField(upload_to='studio_images/', verbose_name='Изображение')
+
+    def __str__(self):
+        return 'Изображение студии #' + str(self.id)
+
+    class Meta:
+        verbose_name_plural = "Изображения Студии"
 

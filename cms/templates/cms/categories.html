@@ -1,6 +1,13 @@
 {% extends "cms/template.html" %}
 {% load staticfiles %}
 
+{% block css %}
+
+    <!-- SummerNote CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/summernote/summernote.css' %}">
+
+{% endblock %}
+
 {% block js %}
     <script>
         $('#main-li').removeClass('active')
@@ -9,15 +16,65 @@
         $('#categories-li').addClass('active')
         $('#categories').addClass('active')
     </script>
+
+    <!-- SummerNote JS -->
+    <script src="{% static 'cms/js/summernote/summernote-updated.min.js' %}"></script>
+    <script src="{% static 'cms/js/summernote/summernote-active.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#summernote1').summernote({
+                placeholder: 'Описание категории',
+                tabsize: 2,
+                height: 200
+            })
+            
+            $('#summernote2').summernote({
+                placeholder: 'Описание категории',
+                tabsize: 2,
+                height: 200
+            })
+
+            $('#summernote3').summernote({
+                placeholder: 'Описание категории',
+                tabsize: 2,
+                height: 200
+            })
+
+            $('.note-editable').each(function(index) {
+                $(this).attr('id', 'note-editable' + (index+1))
+            })
+
+            $('#edit-cat1').click(function() {
+                var html = $('#note-editable1').html()
+                $('#description-field1').val(html)
+                $('#edit-cat-form1').submit()
+            })
+
+            $('#edit-cat2').click(function() {
+                var html = $('#note-editable2').html()
+                $('#description-field2').val(html)
+                $('#edit-cat-form2').submit()
+            })
+
+            $('#edit-cat3').click(function() {
+                var html = $('#note-editable3').html()
+                $('#description-field3').val(html)
+                $('#edit-cat-form3').submit()
+            })
+        })
+    </script>
+
 {% endblock %}
 
 {% block content %}
+    <!-- Category 1 -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-element-list">
             {% if msg1 %}
             <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
             {% endif %}
-            <form method="POST" enctype="multipart/form-data" action="{% url 'cms_categories' %}">{% csrf_token %}
+            <form method="POST" enctype="multipart/form-data" action="{% url 'cms_categories' %}" id="edit-cat-form1">{% csrf_token %}
                 <div class="basic-tb-hd">
                     <h2>Категория №1</h2>
                 </div>
@@ -41,19 +98,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <h5>Описание категории:</h5>
+                                <textarea id="summernote1">{{ category1.description|safe }}</textarea>
+                                <textarea id="description-field1" name="description" style="display: none;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="justify-center">
-                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                    <button type="button" class="btn btn-primary notika-btn-primary btn-lg" id="edit-cat1">Сохранить</button>
                 </div>
             </form>
         </div>
     </div>
+    <!-- /Category 1 -->
 
+    <!-- Category 2 -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 30px;">
         <div class="form-element-list">
             {% if msg2 %}
             <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
             {% endif %}
-            <form method="POST" enctype="multipart/form-data" action="{% url 'cms_categories' %}">{% csrf_token %}
+            <form method="POST" enctype="multipart/form-data" action="{% url 'cms_categories' %}" id="edit-cat-form2">{% csrf_token %}
                 <div class="basic-tb-hd">
                     <h2>Категория №2</h2>
                 </div>
@@ -77,19 +147,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <h5>Описание категории:</h5>
+                                <textarea id="summernote2">{{ category2.description|safe }}</textarea>
+                                <textarea id="description-field2" name="description" style="display: none;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="justify-center">
-                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg" id="edit-cat2">Сохранить</button>
                 </div>
             </form>
         </div>
     </div>
+    <!-- /Category 2 -->
 
+    <!-- Category 3 -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 30px;">
         <div class="form-element-list">
             {% if msg3 %}
             <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
             {% endif %}
-            <form method="POST" enctype="multipart/form-data" action="{% url 'cms_categories' %}">{% csrf_token %}
+            <form method="POST" enctype="multipart/form-data" action="{% url 'cms_categories' %}" id="edit-cat-form2">{% csrf_token %}
                 <div class="basic-tb-hd">
                     <h2>Категория №3</h2>
                 </div>
@@ -113,10 +196,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <h5>Описание категории:</h5>
+                                <textarea id="summernote3">{{ category3.description|safe }}</textarea>
+                                <textarea id="description-field3" name="description" style="display: none;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="justify-center">
-                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg" id="edit-cat3">Сохранить</button>
                 </div>
             </form>
         </div>
     </div>
+    <!-- /Category 3 -->
 {% endblock %}

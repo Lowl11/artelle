@@ -2,60 +2,60 @@
 {% load staticfiles %}
 
 {% block css %}
-    <!-- DropZone CSS -->
-    <link rel="stylesheet" href="{% static 'cms/css/dropzone/dropzone.css' %}">
+    <!-- SummerNote CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/summernote/summernote.css' %}">
 {% endblock %}
 
 {% block js %}
-    <!-- DropZone JS -->
-    <script src="{% static 'cms/js/dropzone/dropzone.js' %}"></script>
+    <!-- SummerNote JS -->
+    <script src="{% static 'cms/js/summernote/summernote-updated.min.js' %}"></script>
+    <script src="{% static 'cms/js/summernote/summernote-active.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('#summernote').summernote({
+                placeholder: 'Текст о нас',
+                tabsize: 2,
+                height: 200
+            })
+
+            $('#edit-about').click(function() {
+                var html = $('.note-editable').html()
+                $('#about-field').val(html)
+                $('#edit-about-form').submit()
+            })
+
+        })
+    </script>
 {% endblock %}
 
 {% block content %}
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="form-element-list">
             {% if msg %}
-            <div class="alert alert-success" role="alert">Информация была успешно обновлена</div>
+            <div class="alert alert-success" role="alert">{{ msg }}</div>
             {% endif %}
-            <form method="POST" action="{% url 'cms_edit_main' %}">{% csrf_token %}
+            {% if error %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+            <form method="POST" action="{% url 'cms_edit_about' %}" id="edit-about-form">{% csrf_token %}
                 <div class="basic-tb-hd">
                     <h2>Редактировать данные страницы "О Нас"</h2>
-                    <p>На этой странице можно изменить видео и заголовок и подзаголовки главной страницы.</p>
+                    <p>На этой странице можно текст со страницы "О Нас".</p>
                 </div>
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <div class="nk-int-st">
-                                <input type="text" class="form-control" name="title" value="{{ info.title }}" placeholder="Заголовок">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <div class="form-group">
-                            <div class="nk-int-st">
-                                <input type="text" class="form-control" name="subtitle1" value="{{ info.subtitle1 }}" placeholder="Подзаголовк №1">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <div class="form-group">
-                            <div class="nk-int-st">
-                                <input type="text" class="form-control" name="subtitle2" value="{{ info.subtitle2 }}" placeholder="Подзаголовк №2">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <div class="form-group">
-                            <div class="nk-int-st">
-                                <input type="text" class="form-control" name="subtitle3" value="{{ info.subtitle3 }}" placeholder="Подзаголовк №3">
+                                <textarea id="summernote">{{ info.about|safe }}</textarea>
+                                <textarea id="about-field" name="about" style="display: none;"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="justify-center">
-                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                    <button type="button" class="btn btn-primary notika-btn-primary btn-lg" id="edit-about">Сохранить</button>
                 </div>
             </form>
         </div>

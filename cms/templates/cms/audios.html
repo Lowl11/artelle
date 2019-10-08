@@ -1,0 +1,123 @@
+{% extends "cms/template.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    <style>
+        .form-element-list {
+            box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+            margin-top: 30px;
+            position: relative;
+        }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $('#main-li').removeClass('active')
+        $('#main').removeClass('active')
+
+        $('#studio-li').addClass('active')
+        $('#studio').addClass('active')
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.delete').click(function() {
+                if (confirm('Вы уверены что хотите удалить аудиозапись?')) {
+                    var id = $(this).data('id')
+                    $.ajax({
+                        type: 'GET',
+                        url: '/cms/studio/audio/get/',
+                        data: { 'id': id, 'action': 'delete' },
+                        cache: false,
+                        success: function(data) {
+                            if(data == "1") {
+                                $('#audio' + id).remove()
+                            }
+                            else {
+                                console.log('Error of deleting audio')
+                            }
+                        },
+                        error: function() { console.log('Error of deleting audio') }
+                    })
+                }
+            })
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <!-- New Audio -->
+    <form method="POST" enctype="multipart/form-data" action="{% url 'cms_studio_audio' %}">{% csrf_token %}
+        <div class="form-element-list">
+            <div class="basic-tb-hd">
+                <h2>Новая аудиозапись</h2>
+            </div>
+            <input type="hidden" name="action" value="add">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <div class="nk-int-st">
+                            <h5>Название аудиозаписи:</h5>
+                            <input type="text" class="form-control" name="name"  placeholder="Название аудиозаписи">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <div class="nk-int-st">
+                            <h5>Файл: </h5>
+                            <input type="file" class="form-control" name="audio" placeholder="Аудиозапись">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="justify-center">
+                <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Добавить</button>
+            </div>
+        </div>
+    </form>
+    <!-- /New Audio -->
+    <hr>
+    <!-- Audio -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        {% for a in audios %}
+        <form method="POST" enctype="multipart/form-data" action="{% url 'cms_studio_audio' %}">{% csrf_token %}
+            <div class="form-element-list" id="audio{{ a.id }}">
+                <div class="basic-tb-hd">
+                    <h2>Аудизапись №{{ a.id }}</h2>
+                </div>
+                <input type="hidden" name="id" value="{{ a.id }}">
+                <input type="hidden" name="action" value="edit">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                    <h5>Название аудиозаписи:</h5>
+                                <input type="text" class="form-control" name="name" value="{{ a.name }}" placeholder="Название аудиозаписи">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <h5>Файл: (загрузите ауидозапись для изменения)</h5>
+                                <input type="file" class="form-control" name="audio" placeholder="Аудиозапись">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="delete" data-id="{{ a.id }}">Удалить?</div>
+                <div class="justify-center">
+                    <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                </div>
+            </div>
+        </form>
+        {% endfor %}
+    </div>
+    <!-- /Audio -->
+{% endblock %}

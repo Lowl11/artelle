@@ -36,6 +36,17 @@ urlpatterns = [
 
 
 
+    ############################# STUDIO ########################################
+    url(r'^studio/audio/$', views.cms_studio_audio, name='cms_studio_audio'),
+    url(r'^studio/audio/get/$', views.cms_studio_audio_get, name='cms_studio_audio_get'),
+    url(r'^studio/images/$', views.cms_studio_images, name='cms_studio_images'),
+    url(r'^studio/images/delete/$', views.cms_si_delete, name='cms_si_delete'),
+    ############################# /STUDIO ########################################
+
+
+
+
+
     ############################# AUTH #################################
     url(r'^login/$', views.login_vp, name='login_vp'),
     url(r'^logout/$', views.logout_g, name='logout_g'),

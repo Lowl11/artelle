@@ -12,6 +12,8 @@ class MainInfo(models.Model):
     phone3 = models.CharField(max_length=20, default='', verbose_name='Номер телефона №3')
     mail = models.CharField(max_length=100, default='', verbose_name='Почтовый ящик компании')
     video = models.FileField(upload_to='home/', verbose_name='Видео Главной Страницы', null=True)
+    about = models.TextField(verbose_name='Текст на странице о нас', default='')
+    si_counter = models.IntegerField(default=0, verbose_name='Счетчик изображений студии')
 
     def __str__(self):
         return 'Основная информация о сайте'

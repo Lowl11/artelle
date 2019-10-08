@@ -80,7 +80,6 @@
                             <div class="alert alert-success" role="alert">{{ video_msg }}</div>
                             {% endif %}
                         </div>
-                        <!-- 2px dashed #00c292 -->
                         <form action="{% url 'cms_edit_main_upload' %}" method="POST" enctype="multipart/form-data" class="dropzone dropzone-nk needsclick upload-video" id="demo1-upload">{% csrf_token %}
                             <input type="file" name="file">
                             <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>

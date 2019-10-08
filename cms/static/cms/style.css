@@ -4637,3 +4637,20 @@ body.box-layout {
     justify-content: center;
     align-items: center;
 }
+
+.delete {
+    position: absolute;
+    right: 30px;
+    top: 15px;
+    color: rgb(153, 47, 47);
+    border: 1px solid rgb(153, 47, 47);
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.delete:hover {
+    background: rgb(153, 47, 47);
+    color: #fff;
+    transition: .25s;
+}

@@ -3,80 +3,70 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
-from .models import Category, Project, ProjectMedia
-from cms.models import MainInfo
+from .viewmodel import MainViewModel
+from .dbcontext import MainDbContext
+from .debugger import Debugger
+
+############## Actions ##############
 
 def home_view(request):
-    info = MainInfo.objects.get(pk=1)
-    context = {
-        'title': 'Главная страница',
-        'page_id': 'start',
-        'info': info
-    }
-    return render(request, 'main/index.html', context)
+    vm = MainViewModel('Главная страница', 'start', MainDbContext.GetMainInfo())
+    return vm.Render(request, 'main/index.html')
+
+def send_email(request):
+    if request.method == "POST":
+        title = 'Hello from Lazy Owl'
+        text = render_to_string('main/mail.html')
+        text = strip_tags(text)
+        sender = 'slimsly11@gmail.com'
+        receivers = ['mm.slimshady@yandex.kz']
+
+        send_mail(title, text, sender, receivers, fail_silently=True)
+        return redirect('/studio/')
+    return HttpResponse('0')
 
 def about_view(request):
-    context = {
-        'title': 'О Нас',
-        'page_id': 'about',
-        'simple': 'simple-page responsive-height'
-    }
-    return render(request, 'main/about.html', context)
+    vm = MainViewModel('О Нас', 'about', MainDbContext.GetMainInfo())
+    vm.Settings(simple_page = True, responsive_height = True)
+    return vm.Render(request, 'main/about.html')
 
 def projects_view(request):
-    categories = Category.objects.all()
-    context = {
-        'title': 'Категории проектов',
-        'page_id': 'projects',
-        'simple': 'simple-page',
-        'categories': categories
-    }
-    return render(request, 'main/categories.html', context)
+    vm = MainViewModel('Категории проектов', 'projects')
+    vm.Settings(simple_page = True, responsive_height = True)
+    vm.AddObject('categories', MainDbContext.GetCategories())
+    return vm.Render(request, 'main/categories.html')
 
 def studio_view(request):
-    context = {
-        'title': 'Студия',
-        'page_id': 'studio',
-        'simple': 'simple-page'
-    }
-    return render(request, 'main/studio.html', context)
+    vm = MainViewModel('Студия', 'studio')
+    vm.Settings(responsive_height = False)
+    vm.AddObject('audios', MainDbContext.GetStudioAudios())
+    vm.AddObject('images', MainDbContext.GetStudioImages())
+    return vm.Render(request, 'main/studio.html')
 
 def contact_view(request):
-    info = MainInfo.objects.get(pk=1)
-    context = {
-        'title': 'Контакты',
-        'page_id': 'contact',
-        'simple': 'simple-page',
-        'info': info
-    }
-    return render(request, 'main/contact.html', context)
+    vm = MainViewModel('Контакты', 'contact', MainDbContext.GetMainInfo())
+    vm.Settings(responsive_height = False)
+    return vm.Render(request, 'main/contact.html')
 
 def projects_list_view(request):
     try:
-        id = request.GET['id']
-        projects = Project.objects.filter(category_id=id)
-
-        for p in projects:
-            images = ProjectMedia.objects.filter(project=p)
-            p.image = images[0].image
+        _id = request.GET['id']
     except:
         return redirect('/categories/')
 
-    images = ProjectMedia.objects.all()
-    array = []
-    for p in Project.objects.all():
-        p_arr = images.filter(project=p)
-        array.append(p_arr)
+    vm = MainViewModel('Проекты', 'projects')
+    vm.Settings(True, True)
+    vm = MainDbContext.GetProjects(_id, vm)
+    if type(vm) is MainViewModel:
+        return vm.Render(request, 'main/projects.html')
+    
+    return redirect('/categories/')
 
-    context = {
-        'title': 'Проекты',
-        'projects': projects,
-        'page_id': 'projects',
-        'simple': 'simple-page responsive-height',
-        'images': array
-    }
-    return render(request, 'main/projects.html', context)
+############## Дополнительные функции ##############
 
 def debug(msg, pre = '0'):
     print('\n--------------------------------------------–')

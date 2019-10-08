@@ -5,6 +5,12 @@
     <!-- SummerNote CSS -->
     <link rel="stylesheet" href="{% static 'cms/css/summernote/summernote.css' %}">
 
+    <!-- DatePicker CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/datapicker/datepicker3.css' %}">
+
+    <!-- Chosen CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/chosen/chosen.css' %}">
+
     <style>
         .project-images {
             display: flex;
@@ -61,9 +67,11 @@
     <script src="{% static 'cms/js/summernote/summernote-updated.min.js' %}"></script>
     <script src="{% static 'cms/js/summernote/summernote-active.js' %}"></script>
 
-    <!-- DropZone JS -->
-    <script src="{% static 'cms/js/dropzone/dropzone.js' %}"></script>
+    <!-- DatePicker JS -->
+    <script src="{% static 'cms/js/datapicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'cms/js/datapicker/datepicker-active.js' %}"></script>
 
+    
     <script>
         $(document).ready(function() {
 
@@ -123,6 +131,21 @@
                     <p>На этой странице можно изменить название проекта, описание, дату и медиафайлы .</p>
                 </div>
                 <input type="hidden" name="id" value="{{ project.id }}">
+                <div class="row"> <!-- Category -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <div class="chosen-select-act fm-cmp-mg">
+                                    <select class="chosen" name="category" id="select-cat" data-placeholder="Выберите категорию...">
+                                        {% for c in categories %}
+                                        <option option="{{ c.id }}">{{ c.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
@@ -133,14 +156,27 @@
                     </div>
                 </div>
                 <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="form-group">
-                                <div class="nk-int-st">
-                                    <textarea id="summernote">{{ project.description|safe }}</textarea>
-                                    <textarea id="description-field" name="description" style="display: none;"></textarea>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <textarea id="summernote">{{ project.description|safe }}</textarea>
+                                <textarea id="description-field" name="description" style="display: none;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="form-group nk-datapk-ctm form-elet-mg" id="data_2">
+                                <label>Дата проекта:</label>
+                                <div class="input-group date nk-int-st">
+                                    <span class="input-group-addon"></span>
+                                    <input type="text" class="form-control" name="date" value="{{ project.formatted }}" required>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
                 <div class="justify-center">
                     <button type="button" class="btn btn-primary notika-btn-primary btn-lg" id="edit-project">Сохранить</button>

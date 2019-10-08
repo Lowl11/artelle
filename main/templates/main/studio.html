@@ -1,6 +1,186 @@
 {% extends "main/template.html" %}
 {% load staticfiles %}
 
+
+{% block css %}
+    <style>
+        .audio-li {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .audio-play {
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+            margin-right: 10px;
+        }
+        .audio-file { display: none; }
+
+        .studio-image { display: none; }
+
+        .right {
+            position: relative;
+        }
+
+        .si-controller {
+            color: #fff;
+            font-size: 25px;
+            position: absolute;
+            font-weight: bold;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            transition: .25s;
+            background: rgba(0, 0, 0, .4);
+        }
+
+        .si-controller:hover {
+            background: rgba(0, 0, 0, .8);
+            transition: .25s;
+        }
+
+        #si-prev {
+            top: 0;
+            left: 0;
+        }
+
+        #si-next {
+            top: 0;
+            right: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script>
+        function ImageNode() {
+
+            this.url = ''
+            this.id = 0
+
+        }
+
+        function SIContainer() {
+
+            this.array = []
+            this.current = 0
+            this.currentIndex = 0
+
+            this.constructor = function() {
+                this.current = this.array[0].id
+            }
+
+            this.append = function(id, url) {
+                var node = new ImageNode()
+                node.id = id
+                node.url = url
+                this.array.push(node)
+            }
+
+            this.next = function() {
+                this.currentIndex++
+                if (this.currentIndex == this.array.length)
+                    this.currentIndex = 0
+                this.current = this.getCurrent().id
+            }
+
+            this.prev = function() {
+                this.currentIndex--
+                if (this.currentIndex == -1)
+                    this.currentIndex = this.array.length-1
+                this.current = this.getCurrent().id
+            }
+
+            this.show = function() {
+                var arr = this.array
+                var str = ''
+                for(var i = 0; i < arr.length; i++) {
+                    str += arr[i].id + ' - ' + arr[i].url + '\n'
+                }
+                alert(str)
+            }
+
+            this.get = function(id) { return this.array[id] }
+
+            this.getCurrent = function() { return this.get(this.currentIndex) }
+
+        }
+
+        $(document).ready(function() {
+
+            var si = new SIContainer()
+
+            $('.audio-play').click(function() {
+                var id = $(this).data('id')
+                var play = parseInt($(this).data('play'))
+
+                $(this).css({'color': 'green'})
+
+                if(play == 0) {
+                    $('#audio-file' + id)[0].play()
+                    $(this).attr('src', '/static/img/pause.png')
+                    $(this).data('play', '1')
+                }
+                else {
+                    $('#audio-file' + id)[0].pause()
+                    $(this).attr('src', '/static/img/play.png')
+                    $(this).data('play', '0')
+                }
+            })
+
+            $('#studio-send-btn').click(function() {
+                $('#studio-send-form').submit()
+            })
+
+            $('.studio-image').each(function(index) {
+                if(index == 0) {
+                    $(this).show()
+                    return
+                }
+            })
+
+            $('.studio-image').each(function(index) {
+                var id = $(this).data('id')
+                var src = $(this).attr('src')
+                si.append(id, src)
+            })
+
+            $('#si-next').click(function() {
+                var node = si.getCurrent()
+                $('#studio-image' + node.id).animate({
+                    width: "toggle"
+                }, 400)
+
+                si.next()
+
+                node = si.getCurrent()
+                $('#studio-image' + node.id).animate({
+                    width: "toggle"
+                }, 400)
+            })
+
+            $('#si-prev').click(function() {
+                var node = si.getCurrent()
+                $('#studio-image' + node.id).animate({
+                    width: "toggle"
+                }, 400)
+
+                si.prev()
+
+                node = si.getCurrent()
+                $('#studio-image' + node.id).animate({
+                    width: "toggle"
+                }, 400)
+            })
+
+        })
+    </script>
+{% endblock %}
+
 {% block content %}
     <!-- CENTER -->
     <div class="flex-box-center">
@@ -10,13 +190,22 @@
                     <div class="title">Студия звукозаписи - ARTelle</div>
                     <div class="subtitle">Приходите в нашу уютную студию 🎤🎧</div>
                     <ul>
-                        <li>🎼Креатив и производство аудио–джинглов</li>
+                        {% for a in audios %}
+                        <li class="audio-li">
+                            <img src="{% static 'img/play.png' %}" alt="Воспроизвести/Пауза" class="audio-play" data-id="{{ a.id }}" data-play="0"> {{ a.name }}
+                            <audio class="audio-file" id="audio-file{{ a.id }}" controls>
+                                <source src="{{ a.audio.url }}" type="audio/mpeg">
+                                Тег audio не поддерживается вашим браузером. 
+                            </audio>
+                        </li>
+                        {% endfor %}
+                        <!-- <li>🎼Креатив и производство аудио–джинглов</li>
                         <li>🎼Озвучивание текстов</li>
                         <li>🎼Создание корпоративной музыки и гимнов </li>
                         <li>🎼Обработка любых материалов клиента</li>
                         <li>🎼Изготовление аранжировок, фонограмм, минусовок</li>
                         <li>🎼Песня «Под ключ»/Cover</li>
-                        <li>🎼Песня «Под ключ»/Авторская</li>
+                        <li>🎼Песня «Под ключ»/Авторская</li> -->
                     </ul>
                 </div>
                 <div class="justify-center">
@@ -24,7 +213,12 @@
                 </div>
             </div>
             <div class="right">
-                <img src="{% static 'img/studio.jpg' %}" alt="Студия">
+                <div id="si-prev" class="si-controller">&lt;</div>
+                {% for i in images %}
+                <img src="{{ i.image.url }}" alt="Студия" data-id="{{ i.id }}" class="studio-image" id="studio-image{{ i.id }}">
+                {% endfor %}
+                <div id="si-next" class="si-controller">&gt;</div>
+                <!-- <img src="{% static 'img/studio.jpg' %}" alt="Студия" id="studio-slider-btn"> -->
             </div>
         </div>
     </div>
@@ -41,7 +235,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <form class="studio-form">
+            <form class="studio-form" id="studio-send-form" method="POST" action="{% url 'send_email' %}">{% csrf_token %}
                 <input type="text" placeholder="Имя" name="" class="form-control">
                 <input type="text" placeholder="Тел" name="" class="form-control">
                 <input type="text" placeholder="Email" name="" class="form-control">
@@ -49,7 +243,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
-            <button type="button" class="btn btn-primary">Отправить</button>
+            <button type="button" class="btn btn-primary" id="studio-send-btn">Отправить</button>
         </div>
         </div>
     </div>

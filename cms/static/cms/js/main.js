@@ -144,3 +144,17 @@
 	
  
 })(jQuery); 
+
+
+$(document).ready(function() {
+	$('.project-description').each(function() {
+		var html = $(this).html()
+		if(html.length > 300) {
+			var res = ''
+			for(var i = 0; i <= 300; i++) {
+				res += html[i]
+			}
+			$(this).html(res)
+		}
+	})
+})

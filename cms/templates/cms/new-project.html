@@ -5,8 +5,60 @@
     <!-- SummerNote CSS -->
     <link rel="stylesheet" href="{% static 'cms/css/summernote/summernote.css' %}">
 
-    <!-- DropZone CSS -->
-    <link rel="stylesheet" href="{% static 'cms/css/dropzone/dropzone.css' %}">
+    <!-- DatePicker CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/datapicker/datepicker3.css' %}">
+
+    <!-- Chosen CSS -->
+    <link rel="stylesheet" href="{% static 'cms/css/chosen/chosen.css' %}">
+
+    <style>
+        .project-images {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .project-image {
+            margin-left: 30px;
+            position: relative;
+        }
+
+        .project-image img {
+            width: 150px;
+            transition: .25s;
+        }
+
+        .project-image img:hover {
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .project-image p {
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: #fff;
+            background: rgba(0, 0, 0, .4);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+            transition: .25s;
+        }
+
+        .project-image p { transition: .25s; }
+
+        .project-image span:hover,
+        .project-image p { cursor: pointer; }
+
+        .error-msg {
+            background: rgb(122, 42, 42);
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
 {% endblock %}
 
 {% block js %}
@@ -22,8 +74,9 @@
     <script src="{% static 'cms/js/summernote/summernote-updated.min.js' %}"></script>
     <script src="{% static 'cms/js/summernote/summernote-active.js' %}"></script>
 
-    <!-- DropZone JS -->
-    <script src="{% static 'cms/js/dropzone/dropzone.js' %}"></script>
+    <!-- DatePicker JS -->
+    <script src="{% static 'cms/js/datapicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'cms/js/datapicker/datepicker-active.js' %}"></script>
 
     <script>
         $(document).ready(function() {
@@ -37,6 +90,7 @@
             $('#new-project').click(function() {
                 var html = $('.note-editable').html()
                 $('#description-field').val(html)
+
                 $('#new-project-form').submit()
             })
 
@@ -54,25 +108,56 @@
                 <div class="basic-tb-hd">
                     <h2>Создание нового проекта</h2>
                     <p>На этой странице можно добавить новый проект включающий в себя медиа файлы.</p>
+                    {% if error %}
+                    <div class="error-msg"><b>Ошибка: </b>{{ error }}</div>
+                    {% endif %}
                 </div>
-                <div class="row">
+                <div class="row"> <!-- Category -->
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <div class="nk-int-st">
-                                <input type="text" class="form-control" name="name" value="" placeholder="Название">
+                                <div class="chosen-select-act fm-cmp-mg">
+                                    <select class="chosen" name="category" id="select-cat" data-placeholder="Выберите категорию...">
+                                        {% for c in categories %}
+                                        <option option="{{ c.id }}">{{ c.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="form-group">
-                                <div class="nk-int-st">
-                                    <textarea id="summernote"></textarea>
-                                    <textarea id="description-field" name="description" style="display: none;"></textarea>
+                <div class="row"> <!-- Name -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" name="name" value="" placeholder="Название" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"> <!-- Description -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="nk-int-st">
+                                <textarea id="summernote"></textarea>
+                                <textarea id="description-field" name="description" style="display: none;" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"> <!-- Date -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <div class="form-group nk-datapk-ctm form-elet-mg" id="data_2">
+                                <label>Дата проекта:</label>
+                                <div class="input-group date nk-int-st">
+                                    <span class="input-group-addon"></span>
+                                    <input type="text" class="form-control" name="date" value="" required>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
                 <div class="justify-center">
                     <button type="button" class="btn btn-primary notika-btn-primary btn-lg" id="new-project">Создать</button>
@@ -82,33 +167,26 @@
     </div>
 
     <!-- Dropzone area Start-->
-    <div class="dropzone-area">
+    <!-- <div class="dropzone-area">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="dropdone-nk mg-t-30">
                         <div class="cmp-tb-hd">
-                            <h2>Сменить видео заднего плана</h2>
-                            <p>Просто перетащите видео в нижнюю область и нажмите сохранить.</p>
+                            <h2>Управление изображениями проекта</h2>
+                            <p>Можно добавлять фото или видео.</p>
                         </div>
-                        <div id="dropzone1" class="multi-uploader-cs">
-                            <form action="#" class="dropzone dropzone-nk needsclick" id="demo1-upload">{% csrf_token %}
-                                <div class="dz-message needsclick download-custom">
-                                    <i class="notika-icon notika-cloud"></i>
-                                    <h2>Drop files here or click to upload.</h2>
-                                    <p><span class="note needsclick">Перетащите файл в данную зону или кликните для загрузки</span>
-                                    </p>
-                                </div>
-                            </form>
-                        </div>
-                        <br>
+                        <hr>
                         <div class="justify-center">
-                            <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Сохранить</button>
+                            <input type="hidden" name="id" value="{{ project.id }}">
+                            <input type="file" name="file">
+                            <button type="submit" class="btn btn-primary notika-btn-primary btn-lg">Добавить</button>
                         </div>
+                        <hr>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Dropzone area End-->
 {% endblock %}

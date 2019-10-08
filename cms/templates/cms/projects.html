@@ -6,6 +6,7 @@
         .form-element-list {
             box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
             margin-top: 30px;
+            position: relative;
         }
     </style>
 {% endblock %}
@@ -17,6 +18,24 @@
 
         $('#projects-li').addClass('active')
         $('#projects').addClass('active')
+
+        $('.delete').click(function() {
+            if (confirm('Вы уверены что хотите удалить проект?')) {
+                var id = $(this).data('id')
+                $.ajax({
+                    type: 'GET',
+                    url: 'project/upload/',
+                    data: { id: id, 'action': 'delete' },
+                    cache: false,
+                    success: function(data) {
+                        if(data == "1") {
+                            window.location.href = "/cms/projects/"
+                        }
+                    },
+                    error: function() { console.log('Error of deleting project') }
+                })
+            }
+        })
     </script>
 {% endblock %}
 
@@ -32,7 +51,9 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="form-group">
                         <b style="display: inline;">Описание проекта: </b>
-                        <p>{{ p.description|safe }}</p>
+                        <div class="project-description">
+                            <p>{{ p.description|safe }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,6 +65,15 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <b>Категория: </b>
+                        <p>{{ p.category_name }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="delete" data-id="{{ p.id }}">Удалить?</div>
         </div>
     </div>
     {% endfor %}

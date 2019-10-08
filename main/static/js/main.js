@@ -9,31 +9,11 @@ $(document).ready(function() {
     /****************************** MAIN ******************************/
 
     $('#soff-video').click(function() {
-        var status = parseInt($(this).data('status'))
-        if(status == 1) {
-            $('#promo').prop('muted', true)
-            $(this).prop('src', '/static/img/sound_off.png')
-            $(this).data('status', '0')
-        }
-        else {
-            $('#promo').prop('muted', false)
-            $(this).prop('src', '/static/img/sound_on.png')
-            $(this).data('status', '1')
-        }
+        window.Utils.soundOnOrOffVideo();
     })
 
     $('#pause-video').click(function() {
-        var status = parseInt($(this).data('status'))
-        if(status == 1) {
-            $('#promo').get(0).pause()
-            $(this).prop('src', '/static/img/play.png')
-            $(this).data('status', '0')
-        }
-        else {
-            $('#promo').get(0).play()
-            $(this).prop('src', '/static/img/pause.png')
-            $(this).data('status', '1')
-        }
+        window.Utils.playOrPauseVideo();
     })
 
     $('#start-page .classic-btn').click(function() {
@@ -44,6 +24,10 @@ $(document).ready(function() {
 
     $('.rps p.text').click(function() {
         var id = $(this).data('id')
+
+        $('#carousel' + id + ' .carousel-indicators li').removeClass('active')
+        $('#carousel' + id + ' .carousel-item').removeClass('active')
+
         $('#carousel' + id + ' .carousel-indicators li').each(function(index) {
             if(index == 0) {
                 $(this).addClass('active')
@@ -56,6 +40,16 @@ $(document).ready(function() {
                 return
             }
         })
+
+        var name = $('#rp-name' + id).text()
+        var description = '<h4>' + name + '</h4>'
+        description += $('#rp-description' + id).html()
+        $('#carousel-description' + id).html(description)
+
+        var descHeight = $('#rp-description' + id).height() + 80
+        $('.carousel-indicators').css({'bottom': descHeight + 'px'})
+
+        $('.carousel').hide()
         $('#carousel' + id).show()
         $('#slider-modal').modal('show')
     })

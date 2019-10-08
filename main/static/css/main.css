@@ -246,6 +246,23 @@ button { cursor: pointer; }
     align-items: center;
 }
 
+.rp-description {
+    display: none;
+}
+
+.carousel-description {
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    padding: 20px 30px;
+    color: #fff;
+    background: #FF8700;
+}
+
+.carousel-control-next, .carousel-control-prev {
+    height: 75%;
+}
+
 .rp p.text {
     color: #fff;
     position: absolute;
@@ -311,7 +328,7 @@ button { cursor: pointer; }
 }
 
 .studio .left ul { padding: 0; }
-.studio .right { flex-basis: 50%; }
+.studio .right { flex-basis: 50%; display: flex; justify-content: center; align-items: center; }
 
 .studio-form input {
     margin-bottom: 20px;
@@ -324,7 +341,7 @@ button { cursor: pointer; }
 
 /**************** PROJECTS ****************/
 .projects {
-    /* margin-top: 30px; */
+    margin-top: 30px;
     display: flex;
     justify-content: space-around;
     /* flex-wrap: wrap; */
