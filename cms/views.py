@@ -9,32 +9,24 @@ import os
 
 from .models import MainInfo
 from main.models import Category, Project, ProjectMedia, StudioAudio, StudioImage
+from .viewmodel import CmsViewModel
+from main.dbcontext import MainDbContext
 
 ################################ MAIN ################################
 @login_required(login_url='/cms/login/')
 def cms_home_view(request):
-    context = {
-        'title': 'Главная'
-    }
-    return render(request, 'cms/index.html', context)
+    vm = CmsViewModel('Главная')
+    return vm.Render(request, 'cms/index.html')
 
 @login_required(login_url='/cms/login/')
 def cms_edit_home(request):
-    info = MainInfo.objects.get(pk=1)
-    context = {
-        'title': 'Редактировать страницу "Главная"',
-        'info': info
-    }
-    return render(request, 'cms/edit-home.html', context)
+    vm = CmsViewModel('Редактировать страницу "Главная"', MainDbContext.GetMainInfo())
+    return vm.Render(request, 'cms/edit-home.html')
 
 @login_required(login_url='/cms/login/')
 def cms_edit_contact(request):
-    info = MainInfo.objects.get(pk=1)
-    context = {
-        'title': 'Редактировать страницу "Контакты"',
-        'info': info
-    }
-    return render(request, 'cms/edit-contact.html', context)
+    vm = CmsViewModel('Редактировать страницу "Контакты"', MainDbContext.GetMainInfo())
+    return vm.Render(request, 'cms/edit-contact.html')
 
 @login_required(login_url='/cms/login/')
 def cms_edit_about(request):

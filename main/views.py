@@ -65,12 +65,3 @@ def projects_list_view(request):
         return vm.Render(request, 'main/projects.html')
     
     return redirect('/categories/')
-
-############## Дополнительные функции ##############
-
-def debug(msg, pre = '0'):
-    print('\n--------------------------------------------–')
-    if pre != '0':
-        print(pre + ':')
-    print(msg)
-    print('--------------------------------------------–\n')
